@@ -17,31 +17,29 @@ class CreateMarks extends React.Component {
             this.setState({url: event.target.value})
         }
     }
-    handleSubmit(event) {
-        console.log(this.state.name)
-        console.log(this.state.url)
-        console.log({
-            name: this.state.name,
-            url: this.state.url,
-            key: Date.now()
-        })
+    handleSubmit() {
         if (this.state.name === '' || this.state.url === '') {
             this.setState({full: false});
         } else {
             this.setState({full: true});
-            this.jsonBookmarks.push({name: this.state.name, url: this.state.url, key: Date.now()})
-            console.log(this.jsonBookmarks)
+            this.jsonBookmarks.bookmarks.push({name: this.state.name, url: this.state.url, key: Date.now()})
+            
+            writeTextFile('bookmarks.json', JSON.stringify(this.jsonBookmarks), { dir: BaseDirectory.App }).then(() => {
+                console.log("Wrote file")
+                this.props.handler();
+            }).catch((error) => {
+                console.log(error);
+            })
         }
 
     }
 
     componentDidMount () {
         const keyDownHandler = event => {
-
             if (event.key === 'Enter') {
-              event.preventDefault();
-      
-              this.handleSubmit();
+                event.preventDefault();
+                this.setState({name: '', url: ''})
+                this.handleSubmit();
             }
         }
         document.addEventListener('keydown', keyDownHandler);
@@ -54,7 +52,7 @@ class CreateMarks extends React.Component {
 
     render() {
         return (
-            <form>
+            <form onSubmit={this.handleSubmit}>
                 <label>
                     Name:
                 </label>

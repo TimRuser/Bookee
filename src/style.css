@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: white;
+}
+
+html {
+    background-color: rgb(30, 30, 30);
+}
+
+#root {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+}
+
+.first-container {
+    display: flex;
+    height: 100%;
+    width: 45%;
+}
+.bookmarks-wrapper {
+    height: 100%;
+    width: 100%;
+}
+.bookmarks-wrapper ul {
+    padding: 0 2.5rem;
+}
+.bookmarks-wrapper li {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    width: 15rem;
+    background-color: grey;
+}
+.bookmark-title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+.bookmark-url {
+    text-decoration: none;
+}
+
+.second-container {
+    display: block;
+}
+.folders-container {
+    padding: 0 2.5rem;
+}
+.create-wrapper form {
+    padding: 0 2.5rem;
+}
+
+.title {
+    color: rgb(237, 237, 237);
+    font-family: 'Roboto', sans-serif;
+    padding: 2rem 2.5rem;
+    text-decoration: underline;
+    text-decoration-color: rgb(250, 241, 70);
+}
