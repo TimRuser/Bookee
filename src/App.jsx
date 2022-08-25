@@ -1,5 +1,6 @@
 import React from "react";
 import ListMarks from "./ListMarks"
+import CreateMarks from "./CreateMarks"
 
 class App extends React.Component {
 
@@ -12,7 +13,7 @@ class App extends React.Component {
         <h1>Folders</h1>
 
         <h1>Add a bookmark</h1>
-
+        <CreateMarks />
       </div>
     );
   }
