@@ -53,15 +53,15 @@ class CreateMarks extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <label>
-                    Name:
+                <label className="input-wrapper">
+                    <input className="nameInput" required="required" type="text" id="name" autoComplete='off' value={this.state.name} onChange={this.handleChange} />
+                    <span className="placeholder">Enter Name</span>
                 </label>
-                <input required="required" type="text" id="name" autoComplete='off' value={this.state.name} onChange={this.handleChange} />
                 <br />
-                <label>
-                    URL:
+                <label className="input-wrapper">
+                    <input className="urlInput" required="required" type="text" id="url" autoComplete='off' value={this.state.url} onChange={this.handleChange} />
+                    <span className="placeholder">Enter URL</span>
                 </label>
-                <input required="required" type="text" id="url" autoComplete='off' value={this.state.url} onChange={this.handleChange} />
                 {!this.state.full &&
                     <p>Some fields are empty. Please try again</p>
                 }
