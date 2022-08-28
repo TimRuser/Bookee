@@ -17,7 +17,7 @@ class ListMarks extends React.Component {
                     const listItems = JSON.parse(bookmarks).bookmarks.map((object) => 
                         <li key={object.id}>
                             <p className="bookmark-title">{object.name}</p>
-                            <a className="bookmark-url" href={object.url}>{object.url}</a>
+                            <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>
                         </li>
                     );
                     this.setState({list: listItems});
