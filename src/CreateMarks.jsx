@@ -48,7 +48,6 @@ class CreateMarks extends React.Component {
             this.jsonBookmarks = JSON.parse(bookmarks);
         });
     };
-    
 
     render() {
         return (

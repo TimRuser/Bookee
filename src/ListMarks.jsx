@@ -1,5 +1,5 @@
 import React from 'react';
-import { readTextFile, createDir, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
+import { readTextFile, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
 
 
 class ListMarks extends React.Component {
@@ -7,9 +7,10 @@ class ListMarks extends React.Component {
         super(props);
         this.state = {
             list: Array()
-        };
+        }
     }
     componentDidMount() {
+        console.log(this.props.reload)
         readTextFile('bookmarks.json', { dir: BaseDirectory.App }).then((bookmarks) => {
             if (bookmarks) {
                 if (JSON.parse(bookmarks).bookmarks.length > 0) {
