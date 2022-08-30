@@ -4,30 +4,26 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    color: white;
     font-family: "Roboto", sans-serif;
     box-sizing: border-box;
 }
 
 html {
-    background-color: rgb(30, 30, 30);
+    background-color: #303030;
+}
+html, body  {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 #root {
     height: 100vh;
     width: 100vw;
-    display: flex;
 }
 
 /* ---- ListMarks ---- */
 
-.first-container {
-    display: flex;
-    height: 100%;
-    width: 45%;
-}
 .bookmarks-wrapper {
-    height: 100%;
     width: 100%;
 }
 .bookmarks-wrapper ul {
@@ -66,63 +62,14 @@ html {
     cursor: pointer;
 }
 
-/* ---- Folders & CreateMarks ---- */
-
-.second-container {
-    display: block;
+/* ---- Material UI ---- */
+#add-button {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
 }
-.folders-container {
-    padding: 0 2.5rem;
-}
-.create-wrapper form {
-    padding: 0 2.5rem;
-}
-
-.input-wrapper {
-    font-size: 14px;
-    position: relative;
+#addbutton svg {
     color: black;
-    border-top: 20px solid transparent;
-}
-.input-wrapper input {
-    margin-bottom: 1.3rem;
-    border: none;
-    -webkit-appearance: none;
-    -ms-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background: #f2f2f2;
-    padding: 12px;
-    border-radius: 3px;
-    width: 250px;
-    font-size: 14px;
-    color: black;
-}
-.input-wrapper .placeholder {
-    position: absolute;
-    left: 12px;
-    bottom: 50%;
-    top: 3px;  
-    transform: translateY(-50%);
-    width: calc(100% - 24px);  
-    color: #aaa;
-    overflow: shown;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-.input-wrapper input:focus + .placeholder {
-    top: -15px;
-    font-size: 10px;
-    color: rgb(182, 182, 182);
-    transition: 
-        top 0.2s ease,
-        color 0.2s ease,
-        font-size 0.2s ease;
-}
-input:valid + .placeholder {
-    top: -15px;
-    font-size: 10px;
-    color: rgb(135, 135, 135);
 }
 
 /* ---- General ---- */
@@ -133,4 +80,11 @@ input:valid + .placeholder {
     padding: 2rem 2.5rem;
     text-decoration: underline;
     text-decoration-color: rgb(250, 241, 70);
+}
+.no-bookmarks {
+    padding: 2.5rem 2.5rem;
+}
+
+p {
+    color: white;
 }

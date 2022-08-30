@@ -1,6 +1,19 @@
 import React from "react";
 import ListMarks  from "./ListMarks"
-import CreateMarks from "./CreateMarks"
+
+import AddIcon from '@mui/icons-material/Add'
+import MenuIcon from '@mui/icons-material/Menu'
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon'
+import { SpeedDial, SpeedDialAction, AppBar, Toolbar, Typography, IconButton } from '@mui/material'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+})
 
 class App extends React.Component {
   constructor(props) {
@@ -14,25 +27,45 @@ class App extends React.Component {
   }
 
   render() {
+    const actions = [
+      { icon: <AddIcon />, name: 'Add' },
+      { icon: <MenuIcon />, name: 'Menu' }
+    ]
     return (
       <div id="root">
-        <div className="first-container">
+        <ThemeProvider theme={darkTheme}>
+          <AppBar position="sticky">
+            <Toolbar variant="dense">
+              <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" color="inherit" component="div">
+                Bookmarks
+              </Typography>
+            </Toolbar>
+          </AppBar>
           <div className="bookmarks-wrapper">
-            <h1 className="title">Bookmarks</h1>
             {this.state.reload == false &&
               <ListMarks reload={this.state.reload}/>
             }
           </div>
-        </div>
-        <div className="second-container">
-          <div className="folders-wrapper">
-            <h1 className="title">Folders</h1>
-          </div>
-          <div className="create-wrapper">
-            <h1 className="title">Add a bookmark</h1>
-            <CreateMarks handler={this.handler} />
-          </div>
-        </div>
+          <SpeedDial
+            ariaLabel="Add Bookmarks and Folders"
+            sx={{ position: 'absolute', bottom: 16, right: 16 }}
+            icon={<SpeedDialIcon />}
+            id="add-button"
+          >
+            {actions.map((action) => (
+              <SpeedDialAction
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={action.name}
+              >
+              </SpeedDialAction>
+            ))}
+          </SpeedDial>
+        </ThemeProvider>
+        
       </div>
     );
   }

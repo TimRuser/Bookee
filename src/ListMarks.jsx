@@ -16,7 +16,7 @@ class ListMarks extends React.Component {
         this.setListItems();
     };
 
-    removeMark(key) {
+    removeMark(folder, key) {
         const newJsonBookmarks = this.jsonBookmarks;
         newJsonBookmarks.bookmarks = this.jsonBookmarks.bookmarks.filter((object) => {
             return object.key !== key;
@@ -50,19 +50,34 @@ class ListMarks extends React.Component {
             readTextFile('bookmarks.json', { dir: BaseDirectory.App }).then((bookmarks) => {
                 if (bookmarks) {
                     this.jsonBookmarks = JSON.parse(bookmarks);
-                    console.log(JSON.parse(bookmarks));
                     if (this.jsonBookmarks.bookmarks.length > 0) {
-                        const listItems = this.jsonBookmarks.bookmarks.map((object) => 
-                            <li key={object.key}>
-                                <i className="fa-solid fa-xmark" onClick={() => this.removeMark(object.key)}></i>
-                                <p className="bookmark-title">{object.name}</p>
-                                <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>
-                            </li>
-                        );
+                        const listItems = this.jsonBookmarks.bookmarks.map((object) => {
+                            if(object.folderContent.length > 0) {
+                                const currentFolder = object.folderName
+                                const returnObject = object.folderContent.map((object) => {
+                                    return (
+                                        <li key={object.Key}>
+                                            <i className="fa-solid fa-xmark" onClick={() => this.removeMark(currentFolder, object.key)}></i>
+                                            <p className="bookmark-title">{object.name}</p>
+                                            <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>
+                                        </li>
+                                    );
+                                })
+                            return (
+                                <div>
+                                    <div key="object.folderKey">
+                                        <p className="bookmark-folder-title">{object.folderName}</p>
+                                    </div>
+                                    <ul>{returnObject}</ul>
+                                </div>
+                            );
+                            }
+                            
+                        });
                         this.setState({list: listItems});
                     } else {
                         const listItems = (
-                            <p>You don't have any bookmarks</p>
+                            <p className="no-bookmarks">You don't have any bookmarks</p>
                         )
                         this.setState({list: listItems});
                     }
@@ -80,7 +95,9 @@ class ListMarks extends React.Component {
     }
 
     render() {
-        return (<ul>{this.state.list}</ul>);
+        return (
+            <div>{this.state.list}</div>
+        );
     }
 }
 
