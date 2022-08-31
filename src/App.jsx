@@ -1,13 +1,12 @@
 import React from "react";
 import ListMarks  from "./ListMarks"
+import CreateMarks from "./CreateMarks"
 
-import AddIcon from '@mui/icons-material/Add'
 import MenuIcon from '@mui/icons-material/Menu'
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import { SpeedDial, SpeedDialAction, AppBar, Toolbar, Typography, IconButton } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
 
 const darkTheme = createTheme({
   palette: {
@@ -18,18 +17,28 @@ const darkTheme = createTheme({
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {reload: false};
+    this.state = {
+      reload: false,
+      renderCreate: false
+    };
     this.handler = this.handler.bind(this);
   }
 
-  handler() {
-    this.setState({reload: true}, () => this.setState({reload: false}));
+  handler(action) {
+    console.log(action);
+    if (action === 'reload') {
+      this.setState({reload: true}, () => this.setState({reload: false}));
+    }
+    if (action === 'createMarks') {
+      const value = this.renderCreate ? false : true;
+      this.setState({renderCreate: value});
+    }
   }
 
   render() {
     const actions = [
-      { icon: <AddIcon />, name: 'Add' },
-      { icon: <MenuIcon />, name: 'Menu' }
+      { icon: <BookmarkIcon />, name: 'Add', event: 'createMarks' },
+      { icon: <MenuIcon />, name: 'Menu', event: 'createFolders' }
     ]
     return (
       <div id="root">
@@ -44,9 +53,12 @@ class App extends React.Component {
               </Typography>
             </Toolbar>
           </AppBar>
+          {this.state.renderCreate == true && 
+            <CreateMarks handler={this.handler}/>
+          }
           <div className="bookmarks-wrapper">
             {this.state.reload == false &&
-              <ListMarks reload={this.state.reload}/>
+              <ListMarks />
             }
           </div>
           <SpeedDial
@@ -60,6 +72,7 @@ class App extends React.Component {
                 key={action.name}
                 icon={action.icon}
                 tooltipTitle={action.name}
+                onClick={() => this.handler(action.event)}
               >
               </SpeedDialAction>
             ))}

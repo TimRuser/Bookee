@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { readTextFile, createDir, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
+import { Box, TextField, IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close';
+
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 class CreateMarks extends React.Component {
     constructor(props) {
@@ -26,7 +33,7 @@ class CreateMarks extends React.Component {
             
             writeTextFile('bookmarks.json', JSON.stringify(this.jsonBookmarks), { dir: BaseDirectory.App }).then(() => {
                 console.log("Wrote file")
-                this.props.handler();
+                this.props.handler('reload');
             }).catch((error) => {
                 console.log(error);
             })
@@ -51,20 +58,32 @@ class CreateMarks extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <label className="input-wrapper">
-                    <input className="nameInput" required="required" type="text" id="name" autoComplete='off' value={this.state.name} onChange={this.handleChange} />
-                    <span className="placeholder">Enter Name</span>
-                </label>
-                <br />
-                <label className="input-wrapper">
-                    <input className="urlInput" required="required" type="text" id="url" autoComplete='off' value={this.state.url} onChange={this.handleChange} />
-                    <span className="placeholder">Enter URL</span>
-                </label>
-                {!this.state.full &&
-                    <p>Some fields are empty. Please try again</p>
-                }
-            </form>
+            <div className="createMarks-wrapper">
+                <Box
+                    sx={{
+                        width: 300,
+                        height: "auto",
+                        backgroundColor: 'grey.800',
+                        borderRadius: 1
+                    }}
+                    className="createMarks-box"
+                >
+                    
+                    <form onSubmit={this.handleSubmit} className="createMarks-form">
+                        <IconButton className="closeIcon" onClick={() => this.props.handler('createMarks')}>
+                            <CloseIcon sx={{color: 'grey.600'}} />
+                        </IconButton>
+                        <TextField id="name" label="Name" variant="outlined" onChange={this.handleChange} />
+                        <br />
+                        <TextField id="url" label="URL" variant="outlined" onChange={this.handleChange} />
+                        {!this.state.full &&
+                            <p>Some fields are empty. Please try again</p>
+                        }
+                    </form>
+                </Box>
+            </div>
+
+            
         )
     }
     
