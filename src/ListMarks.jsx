@@ -11,13 +11,18 @@ class ListMarks extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            list: Array(),
-            tabValue: 0,
+            tabsOutput: Array(),
+            tabContentOutput: Array(),
+            tabValue: 1,
+            noFolders: false,
         }
+        this.tabCount = 0;
+        this.outputList = Array();
         this.jsonBookmarks;
         this.removeMark = this.removeMark.bind(this);
         this.setListItems = this.setListItems.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.convertToOutput = this.convertToOutput.bind(this);
     }
     componentDidMount() {
         this.setListItems();
@@ -66,12 +71,9 @@ class ListMarks extends React.Component {
                             }
                             
                         });
-                        this.setState({list: listItems});
+                        this.outputList = listItems;
                     } else {
-                        const listItems = (
-                            <p className="no-bookmarks">You don't have any bookmarks</p>
-                        )
-                        this.setState({list: listItems});
+                        this.setState({noFolders: true});
                     }
         } else {
             readTextFile('bookmarks.json', { dir: BaseDirectory.App }).then((bookmarks) => {
@@ -80,7 +82,7 @@ class ListMarks extends React.Component {
                     if (this.jsonBookmarks.bookmarks.length > 0) {
                         const listItems = this.jsonBookmarks.bookmarks.map((object) => {
                             if(object.folderContent.length > 0) {
-                                const currentFolder = object.folderName
+                                const currentFolder = object.folderName;
                                 const returnObject = object.folderContent.map((object) => {
                                     return (
                                         <li key={object.key}>
@@ -90,23 +92,26 @@ class ListMarks extends React.Component {
                                         </li>
                                     );
                                 })
-                            return (
-                                <div key={object.key}>
-                                    <div key={object.key}>
-                                        <p className="bookmark-folder-title">{object.folderName}</p>
-                                    </div>
-                                    <ul>{returnObject}</ul>
-                                </div>
-                            );
+                                return (
+                                    [
+                                        <Tab label={object.name} value={this.tabCount.toString()} />,
+                                        <TabPanel value={this.tabCount.toString()}>{returnObject}</TabPanel>
+                                    ]
+                                );
+                            } else {
+                                this.tabCount++;
+                                return (
+                                    [
+                                        <Tab label={object.folderName} value={this.tabCount.toString()} />,
+                                        <TabPanel value={this.tabCount.toString()}><p className="no-bookmarks">There are no bookmarks in this folder.</p></TabPanel>
+                                    ]
+                                );
                             }
-                            
                         });
-                        this.setState({list: listItems});
+                        this.outputList = listItems;
+                        this.convertToOutput();
                     } else {
-                        const listItems = (
-                            <p className="no-bookmarks">You don't have any bookmarks</p>
-                        )
-                        this.setState({list: listItems});
+                        this.setState({noFolders: true})
                     }
                 } 
             }).catch((error) => {
@@ -121,23 +126,42 @@ class ListMarks extends React.Component {
         }
     }
 
-    render() {
+    convertToOutput() {
+        const oldTabsOutput = [];
+        const oldTabContentOutput = [];
+        for (let i = 0; i < this.outputList.length; i++) {
+            oldTabsOutput.push(this.outputList[i][0])
+            oldTabContentOutput.push(this.outputList[i][1])
+        }
+        console.log(oldTabsOutput);
+        this.setState({tabCount: 2}).catch((error) => {console.log(error)})
+    }
 
+    render() {
         return (
-            <Box sx={{ width: '100%', typography: 'body1' }}>
-                <TabContext value={this.state.tabValue}>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <TabList onChange={this.handleChange} aria-label="lab API tabs example">
-                        <Tab label="Item One" value="1" />
-                        <Tab label="Item Two" value="2" />
-                        <Tab label="Item Three" value="3" />
-                    </TabList>
+            <React.Fragment>
+               {this.state.noFolders == false &&
+                    <Box sx={{ width: '100%', typography: 'body1' }} className="list-wrapper">
+                        <TabContext value={this.state.tabValue.toString()}>
+                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <TabList onChange={this.handleChange} aria-label="lab API tabs example">
+                                <Tab label="Item One" value="1" />
+                                <Tab label="Item Two" value="2" />
+                                <Tab label="Item Three" value="3" />
+                            </TabList>
+                            </Box>
+                            <TabPanel value="1">Item One</TabPanel>
+                            <TabPanel value="2">Item Two</TabPanel>
+                            <TabPanel value="3">Item Three</TabPanel>
+                        </TabContext>
                     </Box>
-                    <TabPanel value="1">Item One</TabPanel>
-                    <TabPanel value="2">Item Two</TabPanel>
-                    <TabPanel value="3">Item Three</TabPanel>
-                </TabContext>
-            </Box>
+                }
+                {this.state.noFolders == true &&
+                    <p className="no-bookmarks">You don't have any bookmarks</p>
+                }
+            </React.Fragment>
+            
+            
         );
     }
 }

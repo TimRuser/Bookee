@@ -21,13 +21,13 @@ html, body  {
 
 /* ---- ListMarks ---- */
 
-.bookmarks-wrapper {
-    width: 100%;
+.list-wrapper {
+    padding: 1rem;
 }
-.bookmarks-wrapper ul {
+.list-wrapper ul {
     padding: 0 2.5rem;
 }
-.bookmarks-wrapper li {
+.list-wrapper li {
     padding: 1rem;
     margin-bottom: 1rem;
     width: 15rem;
@@ -36,7 +36,7 @@ html, body  {
     display: flex;
     flex-direction: column;
 }
-.bookmarks-wrapper li:hover {
+.list-wrapper li:hover {
     background-color: rgb(110, 110, 110);
     transition: all 0.15s ease;
     cursor: default;
