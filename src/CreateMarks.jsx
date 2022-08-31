@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { readTextFile, createDir, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
-import { Box, TextField, IconButton } from '@mui/material'
+import { Box, TextField, IconButton, Typography, Select, InputLabel, MenuItem, FormControl } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
 
 import '@fontsource/roboto/300.css';
@@ -12,16 +12,20 @@ class CreateMarks extends React.Component {
     constructor(props) {
         super(props);
         this.jsonBookmarks;
-        this.state = {name: '', url: '', full: true};
+        this.state = {name: '', url: '', folderName: '', folders: Array(), full: true};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
+        console.log(event);
         if(event.target.id === 'name') {
             this.setState({name: event.target.value})
         } else if (event.target.id === 'url') {
             this.setState({url: event.target.value})
+        } else if (event.target.id === 'folder-select') {
+            this.setState({folderName: event.target.value})
+            console.log("It's a folder selector")
         }
     }
     handleSubmit() {
@@ -53,7 +57,14 @@ class CreateMarks extends React.Component {
 
         readTextFile('bookmarks.json', { dir: BaseDirectory.App }).then((bookmarks) => {
             this.jsonBookmarks = JSON.parse(bookmarks);
-        });
+        }).then(() => {
+            this.state.folders = this.jsonBookmarks.bookmarks.map((bookmark) => {
+                return (
+                    <MenuItem value={bookmark.folderName}>{bookmark.folderName}</MenuItem>
+                )
+            })
+        })
+        
     };
 
     render() {
@@ -70,9 +81,25 @@ class CreateMarks extends React.Component {
                 >
                     
                     <form onSubmit={this.handleSubmit} className="createMarks-form">
-                        <IconButton className="closeIcon" onClick={() => this.props.handler('createMarks')}>
+                        <IconButton id="closeIcon" onClick={() => this.props.handler('createMarks')}>
                             <CloseIcon sx={{color: 'grey.600'}} />
                         </IconButton>
+                        <Typography variant="h4" sx={{color: "grey.100"}}>
+                            New Bookmark
+                        </Typography>
+                        <FormControl fullWidth id="folder-selector">
+                            <InputLabel id="folder-selector">Folder</InputLabel>
+                            <Select
+                                labelId="folder-select"
+                                id="folder-select"
+                                value=''
+                                label="Folder"
+                                onChange={this.handleChange}
+                            >
+                                {this.state.folders}
+                            </Select>
+                        </FormControl>
+                        
                         <TextField id="name" label="Name" variant="outlined" onChange={this.handleChange} />
                         <br />
                         <TextField id="url" label="URL" variant="outlined" onChange={this.handleChange} />
