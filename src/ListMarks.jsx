@@ -47,37 +47,42 @@ class ListMarks extends React.Component {
     setListItems(passedBookmarks) {
         if (passedBookmarks) {
             this.jsonBookmarks = passedBookmarks;
-                    if (this.jsonBookmarks.bookmarks.length > 0) {
-                        const listItems = this.jsonBookmarks.bookmarks.map((object) => {
-                            if(object.folderContent.length > 0) {
-                                const currentFolder = object.folderName
-                                const returnObject = object.folderContent.map((object) => {
-                                    return (
-                                        <li key={object.key}>
-                                            <i className="fa-solid fa-xmark" onClick={() => this.removeMark(currentFolder, object.key)}></i>
-                                            <p className="bookmark-title">{object.name}</p>
-                                            <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>
-                                        </li>
-                                    );
-                                })
+            if (this.jsonBookmarks.bookmarks.length > 0) {
+                const listItems = this.jsonBookmarks.bookmarks.map((object) => {
+                    if(object.folderContent.length > 0) {
+                        const currentFolder = object.folderName;
+                        const returnObject = object.folderContent.map((object) => {
                             return (
-                                <div>
-                                    <div key="object.folderKey">
-                                        <p className="bookmark-folder-title">{object.folderName}</p>
-                                    </div>
-                                    <ul>{returnObject}</ul>
-                                </div>
+                                <li key={object.key}>
+                                    <i className="fa-solid fa-xmark" onClick={() => this.removeMark(currentFolder, object.key)}></i>
+                                    <p className="bookmark-title">{object.name}</p>
+                                    <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>
+                                </li>
                             );
-                            }
-                            
-                        });
-                        this.outputList = listItems;
+                        })
+                        return (
+                            [
+                                <Tab label={object.name} value={this.tabCount.toString()} />,
+                                <TabPanel value={this.tabCount.toString()}>{returnObject}</TabPanel>
+                            ]
+                        );
                     } else {
-                        this.setState({noFolders: true});
+                        this.tabCount++;
+                        return (
+                            [
+                                <Tab label={object.folderName} value={this.tabCount.toString()} />,
+                                <TabPanel value={this.tabCount.toString()}><p className="no-bookmarks">There are no bookmarks in this folder.</p></TabPanel>
+                            ]
+                        );
                     }
+                });
+                this.outputList = listItems;
+                this.convertToOutput();
+            } else {
+                this.setState({noFolders: true})
+            }
         } else {
             readTextFile('bookmarks.json', { dir: BaseDirectory.App }).then((bookmarks) => {
-                console.log(BaseDirectory.App)
                 if (bookmarks) {
                     this.jsonBookmarks = JSON.parse(bookmarks);
                     if (this.jsonBookmarks.bookmarks.length > 0) {

@@ -25,7 +25,6 @@ class App extends React.Component {
   }
 
   handler(action) {
-    console.log(action);
     if (action === 'reload') {
       this.setState({reload: true}, () => this.setState({reload: false}));
     }
