@@ -105,9 +105,6 @@ html, body  {
     text-decoration: underline;
     text-decoration-color: rgb(250, 241, 70);
 }
-.no-bookmarks {
-    padding: 2.5rem 2.5rem;
-}
 
 p {
     color: white;

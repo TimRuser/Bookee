@@ -27,9 +27,8 @@ class App extends React.Component {
   handler(action) {
     if (action === 'reload') {
       this.setState({reload: true}, () => this.setState({reload: false}));
-    }
-    if (action === 'createMarks') {
-      const value = this.renderCreate ? false : true;
+    } else if (action === 'createMarks') {
+      const value = this.state.renderCreate ? false : true;
       this.setState({renderCreate: value});
     }
   }

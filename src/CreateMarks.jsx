@@ -59,6 +59,7 @@ class CreateMarks extends React.Component {
             this.jsonBookmarks = JSON.parse(bookmarks);
         }).then(() => {
             this.state.folders = this.jsonBookmarks.bookmarks.map((bookmark) => {
+                console.log(bookmark.folderName)
                 return (
                     <MenuItem value={bookmark.folderName}>{bookmark.folderName}</MenuItem>
                 )
@@ -96,6 +97,7 @@ class CreateMarks extends React.Component {
                                 label="Folder"
                                 onChange={this.handleChange}
                             >
+                                <MenuItem value="Default"></MenuItem>
                                 {this.state.folders}
                             </Select>
                         </FormControl>
