@@ -1,6 +1,6 @@
 import React from 'react';
 import { readTextFile, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
-import { Box, TextField, IconButton, Typography, Select, InputLabel, MenuItem, FormControl, Button } from '@mui/material'
+import { Box, TextField, IconButton, Typography, Select, InputLabel, MenuItem, FormControl } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
 
 import '@fontsource/roboto/300.css';
@@ -82,8 +82,9 @@ class CreateMarks extends React.Component {
                 >
                     
                     <form onSubmit={this.handleSubmit} className="createMarks-form">
-                        <Button id="closeIcon" variant="text" startIcon={<CloseIcon />} onClick={() => this.props.handler('createMarks')}>
-                        </Button>
+                        <IconButton id="closeIcon" onClick={() => this.props.handler('createMarks')}>
+                            <CloseIcon sx={{color: 'grey.600'}} />
+                        </IconButton>
                         <Typography variant="h4" sx={{color: "grey.100"}}>
                             New Bookmark
                         </Typography>
