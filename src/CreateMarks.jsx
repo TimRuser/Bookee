@@ -32,20 +32,17 @@ class CreateMarks extends React.Component {
         } else {
             this.setState({full: true});
             const folderIndex = this.jsonBookmarks.bookmarks.findIndex((object) => {
-                return object.folderName = this.state.folderName;
+                return object.folderName == this.state.folderName;
             });
-            console.log(folderIndex);
             this.jsonBookmarks.bookmarks[folderIndex].folderContent.push({name: this.state.name, url: this.state.url, key: Date.now()})
             
             writeTextFile('bookmarks.json', JSON.stringify(this.jsonBookmarks), { dir: BaseDirectory.App }).then(() => {
-                console.log("Wrote file")
+                this.setState({name: '', url: '', folderName: ''});
                 this.props.handler('reload');
             }).catch((error) => {
                 console.log(error);
             })
-            this.setState({name: '', url: '', folderName: ''});
         }
-
     }
 
     componentDidMount () {
@@ -103,9 +100,9 @@ class CreateMarks extends React.Component {
                             </Select>
                         </FormControl>
                         
-                        <TextField id="name" label="Name" variant="outlined" onChange={this.handleChange} />
+                        <TextField id="name" label="Name" variant="outlined" onChange={this.handleChange} value={this.state.name} />
                         <br />
-                        <TextField id="url" label="URL" variant="outlined" onChange={this.handleChange} />
+                        <TextField id="url" label="URL" variant="outlined" onChange={this.handleChange} value={this.state.url} />
                         {!this.state.full &&
                             <p>Some fields are empty. Please try again</p>
                         }

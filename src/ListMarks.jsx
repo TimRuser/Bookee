@@ -44,11 +44,11 @@ class ListMarks extends React.Component {
         writeTextFile('bookmarks.json', JSON.stringify(newJsonBookmarks), { dir: BaseDirectory.App }).catch((error) => {
             console.log(error);
         })
-        console.log(this.state.tabValue)
         this.setListItems(newJsonBookmarks);
     }
 
     setListItems(passedBookmarks) {
+        this.tabCount = 0;
         if (passedBookmarks) {
             this.jsonBookmarks = passedBookmarks;
             if (this.jsonBookmarks.bookmarks.length > 0) {
@@ -66,6 +66,7 @@ class ListMarks extends React.Component {
                                 </li>
                             );
                         })
+                        this.tabCount++;
                         return (
                             [
                                 <Tab label={object.folderName} value={this.tabCount.toString()} />,
@@ -106,6 +107,7 @@ class ListMarks extends React.Component {
                                         </li>
                                     );
                                 })
+                                this.tabCount++
                                 return (
                                     [
                                         <Tab label={object.folderName} value={this.tabCount.toString()} />,
