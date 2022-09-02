@@ -1,11 +1,11 @@
 import React from 'react';
 import { readTextFile, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
-import { Divider, Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-
+import CloseIcon from '@mui/icons-material/Close';
 
 class ListMarks extends React.Component {
     constructor(props) {
@@ -13,7 +13,7 @@ class ListMarks extends React.Component {
         this.state = {
             tabsOutput: Array(),
             tabContentOutput: Array(),
-            tabValue: 1,
+            tabValue: 0,
             noFolders: false,
         }
         this.tabCount = 0;
@@ -54,7 +54,7 @@ class ListMarks extends React.Component {
                         const returnObject = object.folderContent.map((object) => {
                             return (
                                 <li key={object.key}>
-                                    <i className="fa-solid fa-xmark" onClick={() => this.removeMark(currentFolder, object.key)}></i>
+                                    <CloseIcon className="closeIcon" onClick={() => this.removeMark(currentFolder, object.key)} />
                                     <p className="bookmark-title">{object.name}</p>
                                     <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>
                                 </li>
@@ -62,7 +62,7 @@ class ListMarks extends React.Component {
                         })
                         return (
                             [
-                                <Tab label={object.name} value={this.tabCount.toString()} />,
+                                <Tab label={object.folderName} value={this.tabCount.toString()} />,
                                 <TabPanel value={this.tabCount.toString()}>{returnObject}</TabPanel>
                             ]
                         );
@@ -92,7 +92,9 @@ class ListMarks extends React.Component {
                                 const returnObject = object.folderContent.map((object) => {
                                     return (
                                         <li key={object.key}>
-                                            <i className="fa-solid fa-xmark" onClick={() => this.removeMark(currentFolder, object.key)}></i>
+                                            <IconButton>
+                                                <CloseIcon className="closeIcon" onClick={() => this.removeMark(currentFolder, object.key)} />
+                                            </IconButton>
                                             <p className="bookmark-title">{object.name}</p>
                                             <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>
                                         </li>
@@ -100,7 +102,7 @@ class ListMarks extends React.Component {
                                 })
                                 return (
                                     [
-                                        <Tab label={object.name} value={this.tabCount.toString()} />,
+                                        <Tab label={object.folderName} value={this.tabCount.toString()} />,
                                         <TabPanel value={this.tabCount.toString()}>{returnObject}</TabPanel>
                                     ]
                                 );
@@ -139,9 +141,7 @@ class ListMarks extends React.Component {
             oldTabsOutput.push(this.outputList[i][0])
             oldTabContentOutput.push(this.outputList[i][1])
         }
-        this.setState({tabContentOutput: oldTabContentOutput, tabsOutput: oldTabsOutput}, () => {
-            console.log(this.state.tabContentOutput)
-        })
+        this.setState({tabContentOutput: oldTabContentOutput, tabsOutput: oldTabsOutput})
     }
 
     render() {

@@ -31,14 +31,15 @@ html, body  {
     padding: 1rem;
     margin-bottom: 1rem;
     width: 15rem;
-    background-color: grey;
+    background-color: rgb(80, 80, 80);
     border-radius: 4px;
     display: flex;
     flex-direction: column;
+    transition: all 0.2s ease;
 }
 .list-wrapper li:hover {
-    background-color: rgb(110, 110, 110);
-    transition: all 0.15s ease;
+    background-color: rgb(98, 98, 98);
+    transition: all 0.25s ease;
     cursor: default;
 }
 .bookmark-title {
@@ -48,14 +49,18 @@ html, body  {
 }
 .bookmark-url {
     text-decoration: none;
+    color: rgb(172, 172, 172);
 }
 
-.fa-xmark {
+.closeIcon {
     visibility: hidden;
     align-self: flex-end;
     position: absolute;
+    transition: all 0.1 ease;
+    color: rgb(151, 151, 151);
 }
-.bookmarks-wrapper li:hover > .fa-xmark {
+.bookmarks-wrapper li:hover > .closeIcon {
+    transition: all 0.2s ease;
     visibility: visible;
     cursor: pointer;
 }

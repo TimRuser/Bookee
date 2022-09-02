@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { readTextFile, createDir, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
-import { Box, TextField, IconButton, Typography, Select, InputLabel, MenuItem, FormControl } from '@mui/material'
+import React from 'react';
+import { readTextFile, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
+import { Box, TextField, IconButton, Typography, Select, InputLabel, MenuItem, FormControl, Button } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
 
 import '@fontsource/roboto/300.css';
@@ -18,22 +18,23 @@ class CreateMarks extends React.Component {
     }
 
     handleChange(event) {
-        console.log(event);
         if(event.target.id === 'name') {
             this.setState({name: event.target.value})
         } else if (event.target.id === 'url') {
             this.setState({url: event.target.value})
         } else if (event.target.name === 'folder-select') {
             this.setState({folderName: event.target.value})
-            console.log("It's a folder selector")
         }
     }
     handleSubmit() {
-        if (this.state.name === '' || this.state.url === '') {
+        if (this.state.name === '' || this.state.url === '' || this.state.folderName === '') {
             this.setState({full: false});
         } else {
             this.setState({full: true});
-            this.jsonBookmarks.bookmarks.push({name: this.state.name, url: this.state.url, key: Date.now()})
+            const folderIndex = this.jsonBookmarks.bookmarks.findIndex(object => {
+                return object.folderName = this.state.folderName;
+            });
+            this.jsonBookmarks.bookmarks[folderIndex].folderContent.push({name: this.state.name, url: this.state.url, key: Date.now()})
             
             writeTextFile('bookmarks.json', JSON.stringify(this.jsonBookmarks), { dir: BaseDirectory.App }).then(() => {
                 console.log("Wrote file")
@@ -58,11 +59,10 @@ class CreateMarks extends React.Component {
         readTextFile('bookmarks.json', { dir: BaseDirectory.App }).then((bookmarks) => {
             this.jsonBookmarks = JSON.parse(bookmarks);
         }).then(() => {
-            this.state.folders = this.jsonBookmarks.bookmarks.map((bookmark) => {
-                console.log(bookmark.folderName)
+            this.setState({folders: this.jsonBookmarks.bookmarks.map((bookmark) => {
                 return (
                     <MenuItem value={bookmark.folderName}>{bookmark.folderName}</MenuItem>
-                )
+                )})
             })
         })
         
@@ -82,9 +82,8 @@ class CreateMarks extends React.Component {
                 >
                     
                     <form onSubmit={this.handleSubmit} className="createMarks-form">
-                        <IconButton id="closeIcon" onClick={() => this.props.handler('createMarks')}>
-                            <CloseIcon sx={{color: 'grey.600'}} />
-                        </IconButton>
+                        <Button id="closeIcon" variant="text" startIcon={<CloseIcon />} onClick={() => this.props.handler('createMarks')}>
+                        </Button>
                         <Typography variant="h4" sx={{color: "grey.100"}}>
                             New Bookmark
                         </Typography>
