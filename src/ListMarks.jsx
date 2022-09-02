@@ -77,6 +77,7 @@ class ListMarks extends React.Component {
                     }
         } else {
             readTextFile('bookmarks.json', { dir: BaseDirectory.App }).then((bookmarks) => {
+                console.log(BaseDirectory.App)
                 if (bookmarks) {
                     this.jsonBookmarks = JSON.parse(bookmarks);
                     if (this.jsonBookmarks.bookmarks.length > 0) {
@@ -133,8 +134,9 @@ class ListMarks extends React.Component {
             oldTabsOutput.push(this.outputList[i][0])
             oldTabContentOutput.push(this.outputList[i][1])
         }
-        console.log(oldTabsOutput);
-        this.setState({tabCount: 2}).catch((error) => {console.log(error)})
+        this.setState({tabContentOutput: oldTabContentOutput, tabsOutput: oldTabsOutput}, () => {
+            console.log(this.state.tabContentOutput)
+        })
     }
 
     render() {
@@ -145,19 +147,15 @@ class ListMarks extends React.Component {
                         <TabContext value={this.state.tabValue.toString()}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <TabList onChange={this.handleChange} aria-label="lab API tabs example">
-                                <Tab label="Item One" value="1" />
-                                <Tab label="Item Two" value="2" />
-                                <Tab label="Item Three" value="3" />
+                                {this.state.tabsOutput}
                             </TabList>
                             </Box>
-                            <TabPanel value="1">Item One</TabPanel>
-                            <TabPanel value="2">Item Two</TabPanel>
-                            <TabPanel value="3">Item Three</TabPanel>
+                            {this.state.tabContentOutput}
                         </TabContext>
                     </Box>
                 }
                 {this.state.noFolders == true &&
-                    <p className="no-bookmarks">You don't have any bookmarks</p>
+                    <p className="no-bookmarks">You don't have any folders</p>
                 }
             </React.Fragment>
             
