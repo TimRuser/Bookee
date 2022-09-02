@@ -23,6 +23,9 @@ html, body  {
 
 .list-wrapper {
     padding: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 .list-wrapper ul {
     padding: 0 2.5rem;
@@ -68,6 +71,12 @@ html, body  {
     visibility: visible;
     cursor: pointer;
 }
+#listMarks-moreIcon {
+    position: absolute;
+    top: 67px;
+    right: 20px;
+    z-index: 1;
+}
 
 /* ---- Material UI ---- */
 #add-button {
@@ -79,7 +88,7 @@ html, body  {
     color: black;
 }
 
-.createMarks-wrapper {
+.createMarks-wrapper, .createFolders-wrapper {
     width: 100%;
     height: 100%;
     position: fixed;
@@ -93,13 +102,13 @@ html, body  {
     -moz-backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
 }
-.createMarks-form {
+.createMarks-form, .createFolders-form {
     display: flex;
     position: relative;
     flex-direction: column;
     padding: 2.5rem 2rem 2rem 2rem;
 }
-#createCloseIcon {
+#createCloseIcon, #createFoldersIcon {
     align-self: flex-end;
     position: absolute;
     right: 10px;
@@ -109,6 +118,9 @@ html, body  {
     padding: 20px 0;
 }
 
+.no-folders {
+    padding: 2rem;
+}
 /* ---- General ---- */
 
 .title {

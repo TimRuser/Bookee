@@ -22,21 +22,22 @@ class App extends React.Component {
     this.state = {
       reload: false,
       renderBookmarksCreate: false,
-      renderFoldersCreate: false
-
+      renderFoldersCreate: false,
+      folder: 1
     };
     this.handler = this.handler.bind(this);
   }
 
-  handler(action) {
+  handler(action, folder) {
+    console.log(action, folder)
     if (action === 'reload') {
-      this.setState({reload: true}, () => this.setState({reload: false}));
+      this.setState({reload: true}, () => this.setState({reload: false, folder: folder}));
     } else if (action === 'createMarks') {
       const value = this.state.renderBookmarksCreate ? false : true;
-      this.setState({renderBookmarksCreate: value});
+      this.setState({renderBookmarksCreate: value, renderFoldersCreate: false});
     } else if (action === 'createFolders') {
-      const value = this.state.renderBookmarksCreate ? false : true;
-      this.setState({renderBookmarksFolder: value})
+      const value = this.state.renderFoldersCreate ? false : true;
+      this.setState({renderFoldersCreate: value, renderBookmarksCreate: false})
     }
   }
 
@@ -66,7 +67,7 @@ class App extends React.Component {
           }
           <div className="bookmarks-wrapper">
             {this.state.reload == false &&
-              <ListMarks />
+              <ListMarks folder={this.state.folder}/>
             }
           </div>
           <SpeedDial

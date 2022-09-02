@@ -1,6 +1,6 @@
 import React from 'react';
 import { readTextFile, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
-import { Box, TextField, IconButton, Typography, Select, InputLabel, MenuItem, FormControl } from '@mui/material'
+import { Box, TextField, IconButton, Typography, FormControl } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
 
 import '@fontsource/roboto/300.css';
@@ -28,7 +28,14 @@ class CreateFolders extends React.Component {
         if (this.state.name === '') {
             this.setState({ full: false });
         } else {
-            
+            const index = this.jsonBookmarks.bookmarks.push({"folderName": this.state.name, "folderKey": this.state.name, "folderContent": []});
+            writeTextFile('bookmarks.json', JSON.stringify(this.jsonBookmarks), { dir: BaseDirectory.App }).then(() => {
+                this.props.handler('reload', index);
+                this.setState({name: ''});
+                this.props.handler('createFolders')
+            }).catch((error) => {
+                console.log(error);
+            })
         }
     }
 
@@ -44,12 +51,6 @@ class CreateFolders extends React.Component {
 
         readTextFile('bookmarks.json', { dir: BaseDirectory.App }).then((bookmarks) => {
             this.jsonBookmarks = JSON.parse(bookmarks);
-        }).then(() => {
-            this.setState({folders: this.jsonBookmarks.bookmarks.map((bookmark) => {
-                return (
-                    <MenuItem value={bookmark.folderName}>{bookmark.folderName}</MenuItem>
-                )})
-            })
         })
     }
 
@@ -73,7 +74,9 @@ class CreateFolders extends React.Component {
                         <Typography variant="h4" sx={{color: "grey.100"}}>
                             New Folder
                         </Typography>
-                        <TextField id="folder" label="folder name" variant="outlined" onChange={this.handleChange} />
+                        <FormControl className="createFolders-form">
+                            <TextField id="folder" label="Name" variant="outlined" value={this.state.name} onChange={this.handleChange} margin="normal"/>
+                        </FormControl>
                         {!this.state.full &&
                             <p>Enter a name!</p>
                         }

@@ -34,14 +34,29 @@ class CreateMarks extends React.Component {
             const folderIndex = this.jsonBookmarks.bookmarks.findIndex((object) => {
                 return object.folderName == this.state.folderName;
             });
-            this.jsonBookmarks.bookmarks[folderIndex].folderContent.push({name: this.state.name, url: this.state.url, key: Date.now()})
+            if (!this.state.url.startsWith('https://')) {
+                this.setState({url: 'https://' + this.state.url}, () => {
+                    this.jsonBookmarks.bookmarks[folderIndex].folderContent.push({name: this.state.name, url: this.state.url, key: Date.now()})
             
-            writeTextFile('bookmarks.json', JSON.stringify(this.jsonBookmarks), { dir: BaseDirectory.App }).then(() => {
-                this.setState({name: '', url: '', folderName: ''});
-                this.props.handler('reload');
-            }).catch((error) => {
-                console.log(error);
-            })
+                    writeTextFile('bookmarks.json', JSON.stringify(this.jsonBookmarks), { dir: BaseDirectory.App }).then(() => {
+                        this.props.handler('reload', (folderIndex + 1));
+                        this.setState({name: '', url: '', folderName: ''});
+                        this.props.handler('createMarks')
+                    }).catch((error) => {
+                        console.log(error);
+                    })
+                })
+            } else {
+                this.jsonBookmarks.bookmarks[folderIndex].folderContent.push({name: this.state.name, url: this.state.url, key: Date.now()})
+            
+                writeTextFile('bookmarks.json', JSON.stringify(this.jsonBookmarks), { dir: BaseDirectory.App }).then(() => {
+                    this.props.handler('reload', (folderIndex + 1));
+                    this.setState({name: '', url: '', folderName: ''});
+                    this.props.handler('createMarks')
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
         }
     }
 

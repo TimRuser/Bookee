@@ -1,11 +1,12 @@
 import React from 'react';
 import { readTextFile, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import CloseIcon from '@mui/icons-material/Close';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 class ListMarks extends React.Component {
     constructor(props) {
@@ -13,8 +14,10 @@ class ListMarks extends React.Component {
         this.state = {
             tabsOutput: Array(),
             tabContentOutput: Array(),
-            tabValue: 1,
+            tabValue: this.props.folder,
             noFolders: false,
+            anchorEl: null,
+            openMenu: false
         }
         this.tabCount = 0;
         this.outputList = Array();
@@ -23,13 +26,26 @@ class ListMarks extends React.Component {
         this.setListItems = this.setListItems.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.convertToOutput = this.convertToOutput.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.writeTextFile = this.writeTextFile.bind(this);
     }
     componentDidMount() {
         this.setListItems();
     };
 
     handleChange(event, newValue) {
-        this.setState({tabValue: newValue}, () => console.log(this.state.tabValue));
+        this.setState({tabValue: newValue});
+    }
+
+    handleClick(event) {
+        this.setState({anchorEl: event.currentTarget, openMenu: true});
+    }
+    handleClose(action) {
+        if(action === 'delete') {
+            this.setState({anchorEl: null, openMenu: false});
+            this.removeFolder(this.state.tabValue - 1)
+        }
     }
 
     removeMark(folder, key) {
@@ -41,10 +57,15 @@ class ListMarks extends React.Component {
             return object.key !== key;
         })
 
-        writeTextFile('bookmarks.json', JSON.stringify(newJsonBookmarks), { dir: BaseDirectory.App }).catch((error) => {
-            console.log(error);
-        })
-        this.setListItems(newJsonBookmarks);
+        this.writeTextFile(newJsonBookmarks);
+    }
+    removeFolder(folder) {
+        const newJsonBookmarks = this.jsonBookmarks;
+        newJsonBookmarks.bookmarks.splice(folder, 1);
+        this.writeTextFile(newJsonBookmarks);
+        if (this.state.tabValue > 1) {
+            this.setState({tabValue: this.state.tabValue - 1});
+        }
     }
 
     setListItems(passedBookmarks) {
@@ -133,13 +154,16 @@ class ListMarks extends React.Component {
             }).catch((error) => {
                 console.log(error);
                 const fileContent = '{"bookmarks":[{"folderName": "Default", "folderKey": "Default", "folderContent": []}]}'
-                writeTextFile('bookmarks.json', fileContent, { dir: BaseDirectory.App }).then(() => {
-    
-                }).catch((error) => {
-                    console.log(error);
-                })
+                this.writeTextFile(JSON.parse(fileContent))
             })
         }
+    }
+
+    writeTextFile(newJsonBookmarks) {
+        writeTextFile('bookmarks.json', JSON.stringify(newJsonBookmarks), { dir: BaseDirectory.App }).catch((error) => {
+            console.log(error);
+        })
+        this.setListItems(newJsonBookmarks);
     }
 
     convertToOutput() {
@@ -156,19 +180,33 @@ class ListMarks extends React.Component {
         return (
             <React.Fragment>
                {this.state.noFolders == false &&
-                    <Box sx={{ width: '100%', typography: 'body1' }} className="list-wrapper">
-                        <TabContext value={this.state.tabValue.toString()}>
-                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <TabList onChange={this.handleChange} aria-label="lab API tabs example">
-                                {this.state.tabsOutput}
-                            </TabList>
-                            </Box>
-                            {this.state.tabContentOutput}
-                        </TabContext>
-                    </Box>
+                    <React.Fragment>
+                        <IconButton id="listMarks-moreIcon" onClick={this.handleClick}>
+                            <MoreHorizIcon />
+                        </IconButton>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={this.state.anchorEl}
+                            open={this.state.openMenu}
+                            onClose={this.handleClose}
+                            className="listMarks-menu"
+                        >
+                            <MenuItem onClick={() => this.handleClose('delete')}>Delete Folder</MenuItem>
+                        </Menu>
+                        <Box sx={{ width: '100%', typography: 'body1' }} className="list-wrapper">
+                            <TabContext value={this.state.tabValue.toString()}>
+                                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                <TabList onChange={this.handleChange} aria-label="lab API tabs example">
+                                    {this.state.tabsOutput}
+                                </TabList>
+                                </Box>
+                                {this.state.tabContentOutput}
+                            </TabContext>
+                        </Box>
+                    </React.Fragment>
                 }
                 {this.state.noFolders == true &&
-                    <p className="no-bookmarks">You don't have any folders</p>
+                    <p className="no-folders">You don't have any folders. To get started, hover over the button in the bottom right and select "Add folder".</p>
                 }
             </React.Fragment>
             
