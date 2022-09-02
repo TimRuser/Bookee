@@ -23,7 +23,7 @@ class CreateMarks extends React.Component {
             this.setState({name: event.target.value})
         } else if (event.target.id === 'url') {
             this.setState({url: event.target.value})
-        } else if (event.target.id === 'folder-select') {
+        } else if (event.target.name === 'folder-select') {
             this.setState({folderName: event.target.value})
             console.log("It's a folder selector")
         }
@@ -93,11 +93,11 @@ class CreateMarks extends React.Component {
                             <Select
                                 labelId="folder-select"
                                 id="folder-select"
-                                value=''
+                                value={this.state.folderName}
                                 label="Folder"
                                 onChange={this.handleChange}
+                                name="folder-select"
                             >
-                                <MenuItem value="Default"></MenuItem>
                                 {this.state.folders}
                             </Select>
                         </FormControl>
