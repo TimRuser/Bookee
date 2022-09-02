@@ -31,9 +31,10 @@ class CreateMarks extends React.Component {
             this.setState({full: false});
         } else {
             this.setState({full: true});
-            const folderIndex = this.jsonBookmarks.bookmarks.findIndex(object => {
+            const folderIndex = this.jsonBookmarks.bookmarks.findIndex((object) => {
                 return object.folderName = this.state.folderName;
             });
+            console.log(folderIndex);
             this.jsonBookmarks.bookmarks[folderIndex].folderContent.push({name: this.state.name, url: this.state.url, key: Date.now()})
             
             writeTextFile('bookmarks.json', JSON.stringify(this.jsonBookmarks), { dir: BaseDirectory.App }).then(() => {
@@ -42,6 +43,7 @@ class CreateMarks extends React.Component {
             }).catch((error) => {
                 console.log(error);
             })
+            this.setState({name: '', url: '', folderName: ''});
         }
 
     }
@@ -50,7 +52,6 @@ class CreateMarks extends React.Component {
         const keyDownHandler = event => {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                this.setState({name: '', url: ''})
                 this.handleSubmit();
             }
         }
@@ -82,7 +83,7 @@ class CreateMarks extends React.Component {
                 >
                     
                     <form onSubmit={this.handleSubmit} className="createMarks-form">
-                        <IconButton id="closeIcon" onClick={() => this.props.handler('createMarks')}>
+                        <IconButton id="createCloseIcon" onClick={() => this.props.handler('createMarks')}>
                             <CloseIcon sx={{color: 'grey.600'}} />
                         </IconButton>
                         <Typography variant="h4" sx={{color: "grey.100"}}>

@@ -1,8 +1,10 @@
 import React from "react";
 import ListMarks  from "./ListMarks"
 import CreateMarks from "./CreateMarks"
+import CreateFolders from "./CreateFolders"
 
-import MenuIcon from '@mui/icons-material/Menu'
+import MenuIcon from "@mui/icons-material/Menu"
+import FolderIcon from '@mui/icons-material/Folder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import { SpeedDial, SpeedDialAction, AppBar, Toolbar, Typography, IconButton } from '@mui/material'
@@ -19,7 +21,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       reload: false,
-      renderCreate: false
+      renderBookmarksCreate: false,
+      renderFoldersCreate: false
+
     };
     this.handler = this.handler.bind(this);
   }
@@ -28,15 +32,18 @@ class App extends React.Component {
     if (action === 'reload') {
       this.setState({reload: true}, () => this.setState({reload: false}));
     } else if (action === 'createMarks') {
-      const value = this.state.renderCreate ? false : true;
-      this.setState({renderCreate: value});
+      const value = this.state.renderBookmarksCreate ? false : true;
+      this.setState({renderBookmarksCreate: value});
+    } else if (action === 'createFolders') {
+      const value = this.state.renderBookmarksCreate ? false : true;
+      this.setState({renderBookmarksFolder: value})
     }
   }
 
   render() {
     const actions = [
-      { icon: <BookmarkIcon />, name: 'Add', event: 'createMarks' },
-      { icon: <MenuIcon />, name: 'Menu', event: 'createFolders' }
+      { icon: <BookmarkIcon />, name: 'Add bookmark', event: 'createMarks' },
+      { icon: <FolderIcon />, name: 'Add folder', event: 'createFolders' }
     ]
     return (
       <div id="root">
@@ -51,8 +58,11 @@ class App extends React.Component {
               </Typography>
             </Toolbar>
           </AppBar>
-          {this.state.renderCreate == true && 
-            <CreateMarks handler={this.handler}/>
+          {this.state.renderBookmarksCreate == true && 
+            <CreateMarks handler={this.handler} />
+          }
+          {this.state.renderFoldersCreate == true &&
+            <CreateFolders handler={this.handler} />
           }
           <div className="bookmarks-wrapper">
             {this.state.reload == false &&

@@ -13,7 +13,7 @@ class ListMarks extends React.Component {
         this.state = {
             tabsOutput: Array(),
             tabContentOutput: Array(),
-            tabValue: 0,
+            tabValue: 1,
             noFolders: false,
         }
         this.tabCount = 0;
@@ -29,18 +29,22 @@ class ListMarks extends React.Component {
     };
 
     handleChange(event, newValue) {
-        this.setState({tabValue: newValue})
+        this.setState({tabValue: newValue}, () => console.log(this.state.tabValue));
     }
 
     removeMark(folder, key) {
         const newJsonBookmarks = this.jsonBookmarks;
-        newJsonBookmarks.bookmarks = this.jsonBookmarks.bookmarks.filter((object) => {
+        const folderIndex = newJsonBookmarks.bookmarks.findIndex((object) => {
+            return object.folderName === folder;
+        })
+        newJsonBookmarks.bookmarks[folderIndex].folderContent = this.jsonBookmarks.bookmarks[folderIndex].folderContent.filter((object) => {
             return object.key !== key;
         })
 
         writeTextFile('bookmarks.json', JSON.stringify(newJsonBookmarks), { dir: BaseDirectory.App }).catch((error) => {
             console.log(error);
         })
+        console.log(this.state.tabValue)
         this.setListItems(newJsonBookmarks);
     }
 
@@ -54,7 +58,9 @@ class ListMarks extends React.Component {
                         const returnObject = object.folderContent.map((object) => {
                             return (
                                 <li key={object.key}>
-                                    <CloseIcon className="closeIcon" onClick={() => this.removeMark(currentFolder, object.key)} />
+                                    <IconButton id="closeIcon" size="small" onClick={() => this.removeMark(currentFolder, object.key)}>
+                                        <CloseIcon />
+                                    </IconButton>
                                     <p className="bookmark-title">{object.name}</p>
                                     <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>
                                 </li>
@@ -92,8 +98,8 @@ class ListMarks extends React.Component {
                                 const returnObject = object.folderContent.map((object) => {
                                     return (
                                         <li key={object.key}>
-                                            <IconButton>
-                                                <CloseIcon className="closeIcon" onClick={() => this.removeMark(currentFolder, object.key)} />
+                                            <IconButton size="small" id="closeIcon" onClick={() => this.removeMark(currentFolder, object.key)}>
+                                                <CloseIcon />
                                             </IconButton>
                                             <p className="bookmark-title">{object.name}</p>
                                             <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>

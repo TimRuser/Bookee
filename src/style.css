@@ -36,6 +36,7 @@ html, body  {
     display: flex;
     flex-direction: column;
     transition: all 0.2s ease;
+    position: relative;
 }
 .list-wrapper li:hover {
     background-color: rgb(98, 98, 98);
@@ -52,14 +53,17 @@ html, body  {
     color: rgb(172, 172, 172);
 }
 
-.closeIcon {
+#closeIcon {
     visibility: hidden;
     align-self: flex-end;
     position: absolute;
+    right: 10px;
+    top: 10px;
     transition: all 0.1 ease;
     color: rgb(151, 151, 151);
+    z-index: 1;
 }
-.bookmarks-wrapper li:hover > .closeIcon {
+.bookmarks-wrapper li:hover > #closeIcon {
     transition: all 0.2s ease;
     visibility: visible;
     cursor: pointer;
@@ -91,11 +95,15 @@ html, body  {
 }
 .createMarks-form {
     display: flex;
+    position: relative;
     flex-direction: column;
-    padding: 0.5rem 2rem 2rem 2rem;
+    padding: 2.5rem 2rem 2rem 2rem;
 }
-#closeIcon {
+#createCloseIcon {
     align-self: flex-end;
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
 #folder-selector {
     padding: 20px 0;
