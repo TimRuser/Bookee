@@ -46,7 +46,7 @@ class Bookmarks extends React.Component {
     } else if (action === 'createMarks') {
       this.setState({renderBookmarksCreate: !this.state.renderBookmarksCreate, renderFoldersCreate: false});
     } else if (action === 'createFolders') {
-      this.setState({renderFoldersCreate: !renderFoldersCreate, renderBookmarksCreate: false})
+      this.setState({renderFoldersCreate: !this.state.renderFoldersCreate, renderBookmarksCreate: false})
     }
   }
 
