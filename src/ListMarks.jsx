@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { readTextFile, writeTextFile, createDir, BaseDirectory } from '@tauri-apps/api/fs';
-import { Box, IconButton, Menu, MenuItem } from '@mui/material';
+
+import { Box, IconButton, Menu, MenuItem, ClickAwayListener } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -45,6 +47,8 @@ class ListMarks extends React.Component {
         if(action === 'delete') {
             this.setState({anchorEl: null, openMenu: false});
             this.removeFolder(this.state.tabValue - 1)
+        } else {
+            this.setState({anchorEl: null, openMenu: false});
         }
     }
 
@@ -183,18 +187,23 @@ class ListMarks extends React.Component {
             <React.Fragment>
                {this.state.noFolders == false &&
                     <React.Fragment>
-                        <IconButton id="listMarks-moreIcon" onClick={this.handleClick}>
-                            <MoreHorizIcon />
-                        </IconButton>
-                        <Menu
-                            id="basic-menu"
-                            anchorEl={this.state.anchorEl}
-                            open={this.state.openMenu}
-                            onClose={this.handleClose}
-                            className="listMarks-menu"
-                        >
-                            <MenuItem onClick={() => this.handleClose('delete')}>Delete Folder</MenuItem>
-                        </Menu>
+                       
+                        <ClickAwayListener onClickAway={this.handleClose}>
+                            <React.Fragment>
+                                <IconButton id="listMarks-moreIcon" onClick={this.handleClick}>
+                                    <MoreHorizIcon />
+                                </IconButton>
+                                <Menu
+                                    id="basic-menu"
+                                    anchorEl={this.state.anchorEl}
+                                    open={this.state.openMenu}
+                                    onClose={this.handleClose}
+                                    className="listMarks-menu"
+                                >
+                                    <MenuItem onClick={() => this.handleClose('delete')}>Delete Folder</MenuItem>
+                                </Menu>
+                            </React.Fragment>
+                        </ClickAwayListener>
                         <Box sx={{ width: '100%', typography: 'body1' }} className="list-wrapper">
                             <TabContext value={this.state.tabValue.toString()}>
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

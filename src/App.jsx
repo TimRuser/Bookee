@@ -40,6 +40,10 @@ class App extends React.Component {
     }
   }
 
+  stopLoader() {
+    console.log('Stopped Loader from App.jsx')
+  }
+
   render() {
     const actions = [
       { icon: <BookmarkIcon />, name: 'Add bookmark', event: 'createMarks' },

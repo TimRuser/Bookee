@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "bookmark-app",
-    "version": "0.0.1"
+    "version": "1.0.0"
   },
   "tauri": {
     "allowlist": {
@@ -24,8 +24,8 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
+      "category": "Productivity",
+      "copyright": "2022 © Tim Ruser",
       "deb": {
         "depends": []
       },
@@ -38,7 +38,7 @@
         "icons/icon.ico"
       ],
       "identifier": "com.tauri.data",
-      "longDescription": "",
+      "longDescription": "App to store and manage your bookmarks",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
