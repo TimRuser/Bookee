@@ -1,5 +1,5 @@
 import React from 'react';
-import { readTextFile, writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
+import { readTextFile, writeTextFile, createDir, BaseDirectory } from '@tauri-apps/api/fs';
 import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -154,7 +154,9 @@ class ListMarks extends React.Component {
             }).catch((error) => {
                 console.log(error);
                 const fileContent = '{"bookmarks":[{"folderName": "Default", "folderKey": "Default", "folderContent": []}]}'
-                this.writeTextFile(JSON.parse(fileContent))
+                createDir('', { dir: BaseDirectory.App, recursive: true }).then(() => {
+                    this.writeTextFile(JSON.parse(fileContent));
+                })
             })
         }
     }

@@ -11,12 +11,15 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true,
       "fs": {
         "readFile": true,
         "writeFile": true,
         "readDir": true,
-        "scope": ["$APP/*"]
+        "createDir": true,
+        "scope": ["*/*"]
+      },
+      "shell": {
+        "all": true
       }
     },
     "bundle": {
@@ -34,7 +37,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.tauri.data",
       "longDescription": "",
       "macOS": {
         "entitlements": null,

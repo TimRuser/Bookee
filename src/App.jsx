@@ -29,7 +29,6 @@ class App extends React.Component {
   }
 
   handler(action, folder) {
-    console.log(action, folder)
     if (action === 'reload') {
       this.setState({reload: true}, () => this.setState({reload: false, folder: folder}));
     } else if (action === 'createMarks') {
