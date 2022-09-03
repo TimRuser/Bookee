@@ -65,7 +65,7 @@ class Bookmarks extends React.Component {
         <List>
           {['Bookmarks'].map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => this.props.changeSites('bookmarks')}>
                 <ListItemIcon>
                   <BookmarkIcon />
                 </ListItemIcon>
@@ -78,7 +78,7 @@ class Bookmarks extends React.Component {
         <List>
           {['Settings'].map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => this.props.changeSites('settings')}>
                 <ListItemIcon>
                   <SettingsIcon />
                 </ListItemIcon>

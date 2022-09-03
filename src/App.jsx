@@ -8,16 +8,21 @@ class App extends React.Component {
         this.state = {
             main: true
         }
+        this.changeSites = this.changeSites.bind(this);
+    }
+
+    changeSites(site) {
+        this.setState({main: site === 'bookmarks' ? true : false})
     }
 
     render() {
         return (
             <React.Fragment>
                 {this.state.main &&
-                    <Bookmarks />
+                    <Bookmarks changeSites={this.changeSites}/>
                 }
                 {!this.state.main &&
-                    <Settings />
+                    <Settings changeSites={this.changeSites}/>
                 }
             </React.Fragment>
         )
