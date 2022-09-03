@@ -1,6 +1,5 @@
 ![AppIcon-40@3x](https://user-images.githubusercontent.com/87983726/188284862-ab1d0b97-845d-41d8-96d9-b8c2252886d2.png)
 
-
 # Bookee
 Bookee is a simple app to store your bookmarks. It's written in React with Tauri. 
 
