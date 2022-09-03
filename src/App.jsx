@@ -40,17 +40,13 @@ class App extends React.Component {
     }
   }
 
-  stopLoader() {
-    console.log('Stopped Loader from App.jsx')
-  }
-
   render() {
     const actions = [
       { icon: <BookmarkIcon />, name: 'Add bookmark', event: 'createMarks' },
       { icon: <FolderIcon />, name: 'Add folder', event: 'createFolders' }
     ]
     return (
-      <div id="root">
+      <React.Fragment>
         <ThemeProvider theme={darkTheme}>
           <AppBar position="sticky">
             <Toolbar variant="dense">
@@ -90,8 +86,7 @@ class App extends React.Component {
             ))}
           </SpeedDial>
         </ThemeProvider>
-        
-      </div>
+      </React.Fragment>
     );
   }
 }
