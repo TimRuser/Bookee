@@ -157,10 +157,11 @@ class ListMarks extends React.Component {
                 } 
             }).catch((error) => {
                 console.log(error);
-                const fileContent = '{"bookmarks":[{"folderName": "Default", "folderKey": "Default", "folderContent": []}]}'
+                const fileContent = '{"bookmarks":[{"folderName": "Default", "folderKey": "Default", "folderContent": []}], settings":{}"}'
                 createDir('', { dir: BaseDirectory.App, recursive: true }).then(() => {
                     this.writeTextFile(JSON.parse(fileContent));
                 })
+                this.setListItems(fileContent);
             })
         }
     }
