@@ -24,6 +24,7 @@ class ListMarks extends React.Component {
         this.tabCount = 0;
         this.outputList = Array();
         this.jsonBookmarks;
+        this.bookmarkURL;
         this.removeMark = this.removeMark.bind(this);
         this.setListItems = this.setListItems.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -81,13 +82,18 @@ class ListMarks extends React.Component {
                     if(object.folderContent.length > 0) {
                         const currentFolder = object.folderName;
                         const returnObject = object.folderContent.map((object) => {
+                            if (object.url.length > 27) {
+                                this.bookmarkURL = object.url.substring(0,23) + '...'
+                            } else {
+                                this.bookmarkURL = object.url
+                            }
                             return (
                                 <li key={object.key}>
                                     <IconButton id="closeIcon" size="small" onClick={() => this.removeMark(currentFolder, object.key)}>
                                         <CloseIcon />
                                     </IconButton>
                                     <p className="bookmark-title">{object.name}</p>
-                                    <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>
+                                    <a className="bookmark-url" href={object.url} target="_blank">{this.bookmarkURL}</a>
                                 </li>
                             );
                         })
@@ -122,13 +128,18 @@ class ListMarks extends React.Component {
                             if(object.folderContent.length > 0) {
                                 const currentFolder = object.folderName;
                                 const returnObject = object.folderContent.map((object) => {
+                                    if (object.url.length > 27) {
+                                        this.bookmarkURL = object.url.substring(0,23) + '...'
+                                    } else {
+                                        this.bookmarkURL = object.url
+                                    }
                                     return (
                                         <li key={object.key}>
-                                            <IconButton size="small" id="closeIcon" onClick={() => this.removeMark(currentFolder, object.key)}>
+                                            <IconButton id="closeIcon" size="small" onClick={() => this.removeMark(currentFolder, object.key)}>
                                                 <CloseIcon />
                                             </IconButton>
                                             <p className="bookmark-title">{object.name}</p>
-                                            <a className="bookmark-url" href={object.url} target="_blank">{object.url}</a>
+                                            <a className="bookmark-url" href={object.url} target="_blank">{this.bookmarkURL}</a>
                                         </li>
                                     );
                                 })
